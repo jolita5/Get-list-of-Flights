@@ -12,15 +12,25 @@ namespace Flights
     {
         static void Main(string[] args)
         {
+           int pageNr = 0;
+           GetHtmlAsync(pageNr);
 
-            GetHtmlAsync();
+     
 
             Console.ReadLine();
         }
 
-        private static async void GetHtmlAsync()
+        private static async void GetHtmlAsync(int pageNr)
         {
-            var url = "https://newmood.lt/moterims/products?sort=-latest&new=true&ap=1%2C47";
+            var url = "https://newmood.lt/moterims/c/moterims-drabuziai-sukneles?ap=1%2C48%2C49%2C50";
+
+
+            if (pageNr != 0)
+            {
+                url = "https://newmood.lt/moterims/c/moterims-drabuziai-sukneles?page=" + pageNr + "&sort=&ap=1%2C48%2C49%2C50";
+
+            }
+
 
             var httpClient = new HttpClient();
             var html = await httpClient.GetStringAsync(url);
@@ -29,10 +39,27 @@ namespace Flights
             htmlDocument.LoadHtml(html);
 
 
-            var flightsList = htmlDocument.DocumentNode.Descendants("ul")
-            .Where(node => node.GetAttributeValue("id", "")
-            .Equals("available-flight")).ToList();
 
+            var clothesList = htmlDocument.DocumentNode.Descendants("div")
+            .Where(node => node.GetAttributeValue("id", "")
+            .Equals("product-filter-list")).ToList();
+
+
+            var productList = htmlDocument.DocumentNode.Descendants("ul")
+           .Where(node => node.GetAttributeValue("class", "")
+           .Contains("list-inline")).ToList();
+
+
+            foreach (var item in productList)
+            {
+                Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
+
+                Console.WriteLine(item.Descendants("ul")
+                    .Where(node => node.GetAttributeValue("class", "")
+                    .Equals("list-inline")).FirstOrDefault().InnerText);
+
+
+            }
 
             Console.WriteLine();
         }
