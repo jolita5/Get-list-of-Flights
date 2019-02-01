@@ -23,12 +23,12 @@ namespace Flights
 
         private static async void GetHtmlAsync(int pageNr)
         {
-            var url = "https://newmood.lt/moterims/c/moterims-drabuziai-sukneles?page=1&sort=&ap=1%2C48%2C49%2C50";
+            var url = "https://newmood.lt/moterims/products?sort=-latest&new=true&ap=1%2C47";
 
 
             if (pageNr != 0)
             {
-                url = "https://newmood.lt/moterims/c/moterims-drabuziai-sukneles?page=" + pageNr + "&sort=&ap=1%2C48%2C49%2C50";
+                url = "https://newmood.lt/moterims/products?page" + pageNr + "sort=-latest&new=true&ap=1%2C47";
 
             }
 
@@ -43,7 +43,7 @@ namespace Flights
 
             var clothesList = htmlDocument.DocumentNode.Descendants("div")
             .Where(node => node.GetAttributeValue("id", "")
-            .Equals("product-filter-list")).ToList();
+            .Equals("new-product-list")).ToList();
 
 
             var productList = htmlDocument.DocumentNode.Descendants("div")
@@ -51,24 +51,44 @@ namespace Flights
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
 
-            foreach (var item in productList)
-            {
-               // Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
 
-                Console.WriteLine(item.Descendants("div")
-                    .Where(node => node.GetAttributeValue("class", "")
-                    .Equals("product")).FirstOrDefault().InnerText.Trim('\r', '\n', '\t'));
+                foreach (var item in productList)
+                {
+                    Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
 
-              //  ++pageNr;
-            }
+                    Console.WriteLine(item.Descendants("div")
+                        .Where(node => node.GetAttributeValue("class", "")
+                        .Equals("product")).FirstOrDefault().InnerText.Trim('\r', '\t'));
 
-            Console.WriteLine($"Count of dresses: {productList.Count}.");
+                
+                }
+            
+
+           
+
+
+            //while (productList.Count > 0)
+            //{
+
+            //    foreach (var rakning in productList)
+            //    {
+            //        GetHtmlAsync(pageNr++);
+
+            //    }
+
+
+            //}
+        
+
+
+        Console.WriteLine($"Count of dresses: {productList.Count}.");
 
             Console.WriteLine();
         }
 
 
-       
+
+
     }
 
 
