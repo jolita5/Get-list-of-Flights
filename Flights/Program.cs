@@ -51,6 +51,10 @@ namespace Flights
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
 
+            while (productList.Count > 0)
+            {
+
+
 
                 foreach (var item in productList)
                 {
@@ -60,28 +64,16 @@ namespace Flights
                         .Where(node => node.GetAttributeValue("class", "")
                         .Equals("product")).FirstOrDefault().InnerText.Trim('\r', '\t'));
 
-                
+
+                    GetHtmlAsync(pageNr++);
+
+
                 }
-            
 
-           
-
-
-            //while (productList.Count > 0)
-            //{
-
-            //    foreach (var rakning in productList)
-            //    {
-            //        GetHtmlAsync(pageNr++);
-
-            //    }
+            }
 
 
-            //}
-        
-
-
-        Console.WriteLine($"Count of dresses: {productList.Count}.");
+            Console.WriteLine($"Count of dresses: {productList.Count}.");
 
             Console.WriteLine();
         }
