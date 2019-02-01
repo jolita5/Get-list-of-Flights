@@ -45,23 +45,28 @@ namespace Flights
             .Equals("product-filter-list")).ToList();
 
 
-            var productList = htmlDocument.DocumentNode.Descendants("ul")
+            var productList = htmlDocument.DocumentNode.Descendants("div")
            .Where(node => node.GetAttributeValue("class", "")
-           .Contains("list-inline")).ToList();
+           .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
 
             foreach (var item in productList)
             {
                 Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
 
-                Console.WriteLine(item.Descendants("ul")
+                Console.WriteLine(item.Descendants("div")
                     .Where(node => node.GetAttributeValue("class", "")
-                    .Equals("list-inline")).FirstOrDefault().InnerText);
+                    .Equals("product")).FirstOrDefault().InnerText.Trim('\r', '\n', '\t'));
 
+
+                pageNr++; Console.WriteLine(item.Descendants("div")
+                    .Where(node => node.GetAttributeValue("class", "")
+                    .Equals("right text-right price")).FirstOrDefault().InnerText.Trim('\r', '\n', '\t'));
 
             }
 
             Console.WriteLine();
         }
+
     }
 }
