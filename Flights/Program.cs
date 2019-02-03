@@ -21,6 +21,8 @@ namespace Flights
             Console.ReadLine();
         }
 
+
+
         private static async void GetHtmlAsync(int pageNr)
         {
             var url = "https://newmood.lt/moterims/products?sort=-latest&new=true&ap=1%2C47";
@@ -51,34 +53,27 @@ namespace Flights
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
 
-            while (productList.Count > 0)
+            foreach (var item in productList)
             {
+                Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
 
+                Console.WriteLine(item.Descendants("div")
+                    .Where(node => node.GetAttributeValue("class", "")
+                    .Equals("product")).FirstOrDefault().InnerText.Trim('\n'));
 
+                GetHtmlAsync(++pageNr);
 
-                foreach (var item in productList)
-                {
-                    Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
-
-                    Console.WriteLine(item.Descendants("div")
-                        .Where(node => node.GetAttributeValue("class", "")
-                        .Equals("product")).FirstOrDefault().InnerText.Trim('\r', '\t'));
-
-
-                    GetHtmlAsync(pageNr++);
-
-
-                }
 
             }
 
 
-            Console.WriteLine($"Count of dresses: {productList.Count}.");
 
             Console.WriteLine();
+
+            Console.WriteLine($"Count of products: {productList.Count}.");
+
+
         }
-
-
 
 
     }
