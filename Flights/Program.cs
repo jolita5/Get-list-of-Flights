@@ -68,19 +68,19 @@ namespace Flights
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
 
-            while (productList.Count > 0)
+            //while (productList.Count > 0)
+            //{
+            foreach (var item in productList)
             {
-                foreach (var item in productList)
-                {
-                    Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
+                Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
 
-                    Console.WriteLine(item.Descendants("div")
-                        .Where(node => node.GetAttributeValue("class", "")
-                        .Equals("product")).FirstOrDefault().InnerText.Trim('\n'));
+                Console.WriteLine(item.Descendants("div")
+                    .Where(node => node.GetAttributeValue("class", "")
+                    .Equals("product")).FirstOrDefault().InnerText.Trim('\n'));
 
-                    raknings = GetUrl(++pageNr);
+                raknings = GetUrl(++pageNr);
 
-                }
+                // }
 
             }
 
