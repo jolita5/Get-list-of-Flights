@@ -13,8 +13,9 @@ namespace Flights
     {
         static void Main(string[] args)
         {
-            int pageNr = 0;
-            GetHtmlAsync(pageNr);
+
+
+            GetHtmlAsync();
 
 
 
@@ -22,21 +23,35 @@ namespace Flights
         }
 
 
-
-        private static async void GetHtmlAsync(int pageNr)
+        private static string GetUrl(int pageNr)
         {
-            var url = "https://newmood.lt/moterims/products?sort=-latest&new=true&ap=1%2C47";
+            pageNr = 0;
 
+            string url = "";
 
             if (pageNr != 0)
             {
-                url = "https://newmood.lt/moterims/products?page" + pageNr + "sort=-latest&new=true&ap=1%2C47";
-
+                return url = "https://newmood.lt/moterims/products?page" + pageNr + "sort=-latest&new=true&ap=1%2C47";
             }
 
 
+            return url = "https://newmood.lt/moterims/products?sort=-latest&new=true&ap=1%2C47";
+
+
+        }
+
+
+
+        private static async void GetHtmlAsync()
+        {
+
+            int pageNr = 0;
+
+            var raknings = GetUrl(pageNr);
+
+
             var httpClient = new HttpClient();
-            var html = await httpClient.GetStringAsync(url);
+            var html = await httpClient.GetStringAsync(GetUrl(pageNr));
 
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
@@ -53,18 +68,22 @@ namespace Flights
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
 
-            foreach (var item in productList)
+            while (productList.Count > 0)
             {
-                Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
+                foreach (var item in productList)
+                {
+                    Console.WriteLine(item.GetAttributeValue("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block", ""));
 
-                Console.WriteLine(item.Descendants("div")
-                    .Where(node => node.GetAttributeValue("class", "")
-                    .Equals("product")).FirstOrDefault().InnerText.Trim('\n'));
+                    Console.WriteLine(item.Descendants("div")
+                        .Where(node => node.GetAttributeValue("class", "")
+                        .Equals("product")).FirstOrDefault().InnerText.Trim('\n'));
 
-                GetHtmlAsync(++pageNr);
+                    raknings = GetUrl(++pageNr);
 
+                }
 
             }
+
 
 
 
