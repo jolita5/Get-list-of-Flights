@@ -17,8 +17,6 @@ namespace Flights
             int pageNr = 0;
             GetHtmlAsync(pageNr);
 
-            //  GetRequest(GetUrl(pageNr));
-
 
             Console.ReadLine();
         }
@@ -46,7 +44,7 @@ namespace Flights
         private static async void GetHtmlAsync(int pageNr)
         {
             pageNr = 0;
-       
+
             var raknings = GetUrl(pageNr);
 
 
@@ -66,27 +64,28 @@ namespace Flights
            .Where(node => node.GetAttributeValue("class", "")
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
-           
+            bool check = true;
+
             while (productList.Count > 0)
-            { 
-            foreach (var item in productList)
             {
+                foreach (var item in productList)
+                {
 
-                
 
-                Console.WriteLine(item.GetAttributeValue("brand", ""));
 
-                Console.WriteLine(
-                    item.Descendants("div")
-                    .Where(node => node.GetAttributeValue("class", "")
-                    .Equals("title")).FirstOrDefault().InnerText.Trim('\r', '\n', 't'));
+                    Console.WriteLine(item.GetAttributeValue("brand", ""));
 
-                Console.WriteLine(
-                    Regex.Match(
+                    Console.WriteLine(
                         item.Descendants("div")
                         .Where(node => node.GetAttributeValue("class", "")
-                        .Equals("right text-right price")).FirstOrDefault().InnerText.Trim('\r', '\n', 't')
-                    , @"\d+.\d+"));
+                        .Equals("title")).FirstOrDefault().InnerText.Trim('\r', '\n', 't'));
+
+                    Console.WriteLine(
+                        Regex.Match(
+                            item.Descendants("div")
+                            .Where(node => node.GetAttributeValue("class", "")
+                            .Equals("right text-right price")).FirstOrDefault().InnerText.Trim('\r', '\n', 't')
+                        , @"\d+.\d+"));
 
                     //Console.WriteLine(
                     //    item.Descendants("div")
@@ -97,13 +96,12 @@ namespace Flights
 
 
                     raknings = GetUrl(++pageNr);
+
+                    
                 }
-              
+
+
             }
-
-
-
-
 
             Console.WriteLine();
 
@@ -111,22 +109,6 @@ namespace Flights
 
 
         }
-
-        static async void GetRequest(string url)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                using (HttpResponseMessage response = await client.GetAsync(url))
-                {
-                    using (HttpContent content = response.Content)
-                    {
-                        string myContent = await content.ReadAsStringAsync();
-                        Console.WriteLine(myContent);
-                    }
-                }
-            }
-        }
-
     }
 
 
