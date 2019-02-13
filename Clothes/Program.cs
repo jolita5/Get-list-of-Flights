@@ -28,11 +28,11 @@ namespace Flights
         {
             pageNr = 0;
 
-            string url = "";
+            string url = null;
 
             if (pageNr != 0)
             {
-                return url = "https://newmood.lt/moterims/products?page=" + pageNr + "&sort=-latest&ap=1%2C47&new=true";
+                url = "https://newmood.lt/moterims/products?page=" + pageNr + "&sort=-latest&ap=1%2C47&new=true";
             }
 
 
@@ -45,20 +45,13 @@ namespace Flights
 
         private static async void GetHtmlAsync(int pageNr)
         {
-
-            string url = "https://newmood.lt/moterims/products?sort=-latest&new=true&ap=1%2C47";
-
-
-            if (pageNr != 0)
-            {
-                url = "https://newmood.lt/moterims/products?page=" + pageNr + "&sort=-latest&ap=1%2C47&new=true";
-            }
-
+            pageNr = 0;
+       
             var raknings = GetUrl(pageNr);
 
 
             var httpClient = new HttpClient();
-            var html = await httpClient.GetStringAsync(url);
+            var html = await httpClient.GetStringAsync(GetUrl(pageNr));
 
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
@@ -73,12 +66,13 @@ namespace Flights
            .Where(node => node.GetAttributeValue("class", "")
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
+           
             while (productList.Count > 0)
             { 
             foreach (var item in productList)
             {
 
-                raknings = GetUrl(++pageNr);
+                
 
                 Console.WriteLine(item.GetAttributeValue("brand", ""));
 
@@ -100,12 +94,11 @@ namespace Flights
                     //    .Equals("size")).FirstOrDefault().InnerText.Trim('\r', '\n', 't'));
 
                     Console.WriteLine(item.Descendants("a").FirstOrDefault().GetAttributeValue("href", ""));
-                
-                    ++pageNr;
 
 
+                    raknings = GetUrl(++pageNr);
                 }
-
+              
             }
 
 
