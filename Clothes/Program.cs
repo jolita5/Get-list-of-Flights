@@ -30,7 +30,7 @@ namespace Flights
 
             if (pageNr != 0)
             {
-                url = "https://newmood.lt/moterims/products?page=" + pageNr + "&sort=-latest&ap=1%2C47&new=true";
+                return url = "https://newmood.lt/moterims/products?page=" + pageNr + "&sort=-latest&ap=1%2C47&new=true";
             }
 
 
@@ -47,9 +47,8 @@ namespace Flights
 
             var raknings = GetUrl(pageNr);
 
-
             var httpClient = new HttpClient();
-            var html = await httpClient.GetStringAsync(GetUrl(pageNr));
+            var html = await httpClient.GetStringAsync(raknings);
 
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
@@ -64,15 +63,10 @@ namespace Flights
            .Where(node => node.GetAttributeValue("class", "")
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
-            bool check = true;
-
             while (productList.Count > 0)
             {
                 foreach (var item in productList)
                 {
-
-
-
                     Console.WriteLine(item.GetAttributeValue("brand", ""));
 
                     Console.WriteLine(
@@ -87,19 +81,14 @@ namespace Flights
                             .Equals("right text-right price")).FirstOrDefault().InnerText.Trim('\r', '\n', 't')
                         , @"\d+.\d+"));
 
-                    //Console.WriteLine(
-                    //    item.Descendants("div")
-                    //    .Where(node => node.GetAttributeValue("class", "")
-                    //    .Equals("size")).FirstOrDefault().InnerText.Trim('\r', '\n', 't'));
 
                     Console.WriteLine(item.Descendants("a").FirstOrDefault().GetAttributeValue("href", ""));
 
 
                     raknings = GetUrl(++pageNr);
 
-                    
-                }
 
+                }
 
             }
 
