@@ -63,7 +63,8 @@ namespace Flights
            .Where(node => node.GetAttributeValue("class", "")
            .Contains("col-xs-6 col-md-4 col-sm-4 col-lg-4 product-block")).ToList();
 
-            while (productList.Count > 0)
+
+            //while (productList.Count > 0)
             {
                 foreach (var item in productList)
                 {
@@ -85,7 +86,7 @@ namespace Flights
                     Console.WriteLine(item.Descendants("a").FirstOrDefault().GetAttributeValue("href", ""));
 
 
-                    raknings = GetUrl(++pageNr);
+                   // raknings = GetUrl(++pageNr);
 
 
                 }
